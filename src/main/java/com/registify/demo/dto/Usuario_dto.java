@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class Usuario_dto {
 
-    private Integer cif;
+    private String cif;
 
-    private Integer password;
+    private String password;
 }

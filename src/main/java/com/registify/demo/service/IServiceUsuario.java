@@ -3,6 +3,7 @@ package com.registify.demo.service;
 import com.registify.demo.dto.Usuario_dto;
 import com.registify.demo.model.Actividad_entity;
 import com.registify.demo.model.Usuario_entity;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,5 +19,5 @@ public interface IServiceUsuario {
 
     Usuario_entity getUsuario(UUID id);
 
-    Boolean confirmCredentials(Usuario_dto usuarioP) throws Exception;
+    ResponseEntity<String> confirmCredentials(Usuario_dto usuarioP) throws Exception;
 }

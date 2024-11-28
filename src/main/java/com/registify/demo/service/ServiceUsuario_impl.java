@@ -6,6 +6,8 @@ import com.registify.demo.repository.IUsuarioRepo;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,23 +63,29 @@ public class ServiceUsuario_impl implements IServiceUsuario{
     }
 
     @Override
-    public Boolean confirmCredentials(Usuario_dto usuarioP) throws Exception {
+    public ResponseEntity<String> confirmCredentials(Usuario_dto usuarioP) throws Exception {
 
         try {
-            Usuario_entity usuario = usuarioRepo.findByCif(usuarioP.getCif()).get();
+            // Buscar usuario por CIF
+            Usuario_entity usuario = usuarioRepo.findByCif(usuarioP.getCif()).orElse(null);
+
             if (usuario == null) {
-                throw new Exception("Usuario no encontrado");
+                // Usuario no encontrado, retorna 404
+                return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
             }
 
-            if (usuarioP.getPassword() == usuario.getPassword()) {
-                return true;
+            // Verificar que las contraseñas coincidan
+            if (usuarioP.getPassword().equals(usuario.getPassword())) {
+                // Credenciales correctas, retorna 200 OK
+                return new ResponseEntity<>("Login exitoso", HttpStatus.OK);
+            } else {
+                // Contraseña incorrecta, retorna 401
+                return new ResponseEntity<>("Contraseña incorrecta", HttpStatus.UNAUTHORIZED);
             }
 
         } catch (Exception e) {
-            throw e;
+            // En caso de error general, devuelve 500
+            return new ResponseEntity<>("Error en el servidor", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return false;
     }
-
 }

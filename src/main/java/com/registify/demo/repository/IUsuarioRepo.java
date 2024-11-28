@@ -11,5 +11,5 @@ import java.util.UUID;
 @Repository
 public interface IUsuarioRepo extends JpaRepository<Usuario_entity, UUID> {
 
-    Optional<Usuario_entity> findByCif(Integer cif);
+    Optional<Usuario_entity> findByCif(String cif);
 }

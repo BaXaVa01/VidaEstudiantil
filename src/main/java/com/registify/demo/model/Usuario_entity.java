@@ -11,8 +11,8 @@ import lombok.Setter;
 public class Usuario_entity extends Identifiable {
 
     @Column(name = "usuario")
-    private Integer cif;
+    private String cif;
 
     @Column(name = "password")
-    private Integer password;
+    private String password;
 }
