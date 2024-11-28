@@ -34,14 +34,14 @@ public class ControllerLogin {
 
     }
 
-    @GetMapping("/log")
-    public Boolean loginUser(@RequestBody Usuario_dto usuarioDto) {
+    @PostMapping("/log")
+    public String loginUser(@RequestBody Usuario_dto usuarioDto) {
         try {
             return service.confirmCredentials(usuarioDto);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return "hola";
         }
 
     }

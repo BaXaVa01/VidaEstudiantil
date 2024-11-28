@@ -18,5 +18,5 @@ public interface IServiceUsuario {
 
     Usuario_entity getUsuario(UUID id);
 
-    Boolean confirmCredentials(Usuario_dto usuarioP) throws Exception;
+    String confirmCredentials(Usuario_dto usuarioP) throws Exception;
 }
