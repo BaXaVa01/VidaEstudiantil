@@ -35,7 +35,7 @@ public class ControllerLogin {
         }
 
     }
-    @CrossOrigin(origins = "http://localhost:5180")
+    @CrossOrigin(origins = "*")
     @PostMapping("/log")
     public ResponseEntity<String> loginUser(@RequestBody Usuario_dto usuarioDto) {
         try {
