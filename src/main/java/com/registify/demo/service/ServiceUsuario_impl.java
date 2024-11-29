@@ -103,7 +103,7 @@ public class ServiceUsuario_impl implements IServiceUsuario{
             // Realizar la solicitud GET
             String url = "https://uvirtual.uam.edu.ni:442/uambiblioapi/User/GetStudentInformation?cif=" + usuarioP.getCif();
             ResponseEntity<String> respuseta = restClient.get()
-                    .uri()
+                    .uri(url)
                     .header("Authorization", "Bearer " +token.getBody())
                     .retrieve()
                     .toEntity(String.class);
