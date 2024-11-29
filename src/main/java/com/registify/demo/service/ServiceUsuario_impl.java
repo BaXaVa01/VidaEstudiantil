@@ -8,8 +8,11 @@ import io.swagger.v3.core.util.Json;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -96,9 +99,11 @@ public class ServiceUsuario_impl implements IServiceUsuario{
                     .body(usuarioP)
                     .retrieve().toEntity(String.class);
 
+
             System.out.println(token.getBody());
 
 
+            //TODO : "Agregar un queryparam"
 
             // Realizar la solicitud GET
             String url = "https://uvirtual.uam.edu.ni:442/uambiblioapi/User/GetStudentInformation?cif=" + usuarioP.getCif();
@@ -112,6 +117,24 @@ public class ServiceUsuario_impl implements IServiceUsuario{
 //            System.out.println(datosEstudiante.getBody());
             return respuseta.getBody();
 
+        }catch (HttpClientErrorException e) {
+            // Manejar errores 4xx
+            System.err.println("Error HTTP (4xx): " + e.getStatusCode());
+            System.err.println("Cuerpo de la respuesta: " + e.getResponseBodyAsString());
+
+            // Retornar un identificador específico según el tipo de error
+            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                return "ERROR: Token inválido o expirado.";
+            } else if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return "ERROR: Usuario no encontrado.";
+            } else {
+                return "ERROR: Solicitud inválida. Detalles: " + e.getStatusCode();
+            }
+        } catch (HttpServerErrorException e) {
+            // Manejar errores 5xx
+            System.err.println("Error HTTP (5xx): " + e.getStatusCode());
+            System.err.println("Cuerpo de la respuesta: " + e.getResponseBodyAsString());
+            return "ERROR: Problema en el servidor externo. Intenta nuevamente más tarde.";
         }
         catch (Exception e){
 
